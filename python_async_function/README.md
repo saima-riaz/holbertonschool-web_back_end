@@ -16,5 +16,5 @@ This collection of Python scripts demonstrates asynchronous programming using co
 4. [**`3-tasks.py`**](3-tasks.py)
    - Regular function `task_wait_random` creates an asyncio Task for `wait_random(max_delay)`.
 
-5. [**`4-task_wait_n.py`**](4-task_wait_n.py)
+5. [**`4-task.py`**](4-task.py)
    - Module returns a list of delays using asyncio tasks and `task_wait_random`.
