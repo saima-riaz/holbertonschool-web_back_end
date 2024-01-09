@@ -1,2 +1,2 @@
-// to insert a documment into a collection in db
-db.school.insert({name: "Holberton school"})
+//script to create or use a db my_db
+use my_db
