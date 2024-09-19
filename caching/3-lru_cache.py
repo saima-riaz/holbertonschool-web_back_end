@@ -33,11 +33,9 @@ class LRUCache(BaseCaching):
         """ Get an item from the cache """
         if key is None or key not in self.key_order:
             return None
-         
-         # Move the key to the most recently used position
+
+        # Move the key to the most recently used position
         self.key_order.remove(key)
         self.key_order.append(key)
 
         return self.cache_data[key]
-
-        
