@@ -14,6 +14,8 @@ def filter_datum(
     return message
 
 
+"1. Log formatter "
+
 class RedactingFormatter(logging.Formatter):
     """Redacting Formatter class"""
 
@@ -23,9 +25,11 @@ class RedactingFormatter(logging.Formatter):
 
     def __init__(self, fields: List[str]):
         """Initialize the formatter with fields to obfuscate"""
-        super().__init__(self.FORMAT)
+        super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """Format log record and obfuscate sensitive fields"""
-        return filter_datum(self.fields, self.REDACTION, super().format(record), self.SEPARATOR)
+        """Filter values in incoming log records using filter_datum"""
+        record.msg = filter_datum(self.fields, self.REDACTION, record.msg, self.SEPARATOR)
+        return super().format(record)
+    
