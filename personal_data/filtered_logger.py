@@ -5,6 +5,11 @@ import re
 import logging
 from typing import List
 
+# Define the PII fields tuple
+PII_FIELDS = ("name", "email", "ssn", "password", "address")
+
+
+# 0. Regex-ing task
 
 def filter_datum(
     fields: List[str], redaction: str, message: str, separator: str
@@ -37,4 +42,25 @@ class RedactingFormatter(logging.Formatter):
         )
         return super().format(record)
 
-# Ensure there is a newline at the end of the file
+# 2. Create logger
+
+# Define the get_logger function
+
+    def get_logger() -> logging.Logger:
+        """Creates and returns a
+        logger configured with a RedactingFormatter."""
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False  # Prevent propagation to other loggers
+
+    # Create a stream handler
+    handler = logging.StreamHandler()
+
+    # Set the RedactingFormatter with PII_FIELDS
+    formatter = RedactingFormatter(fields=PII_FIELDS)
+    handler.setFormatter(formatter)
+
+    # Add the handler to the logger
+    logger.addHandler(handler)
+
+    return logger
