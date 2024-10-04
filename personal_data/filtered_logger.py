@@ -5,6 +5,7 @@ import re
 import logging
 from typing import List
 
+
 def filter_datum(
     fields: List[str], redaction: str, message: str, separator: str
 ) -> str:
@@ -14,7 +15,8 @@ def filter_datum(
     return message
 
 
-"1. Log formatter "
+# 1. Log formatter
+
 
 class RedactingFormatter(logging.Formatter):
     """Redacting Formatter class"""
@@ -30,6 +32,9 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """Filter values in incoming log records using filter_datum"""
-        record.msg = filter_datum(self.fields, self.REDACTION, record.msg, self.SEPARATOR)
+        record.msg = filter_datum(
+            self.fields, self.REDACTION, record.msg, self.SEPARATOR
+        )
         return super().format(record)
-    
+
+# Ensure there is a newline at the end of the file
