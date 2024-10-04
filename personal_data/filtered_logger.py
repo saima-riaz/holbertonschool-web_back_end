@@ -6,7 +6,7 @@ import logging
 from typing import List
 
 # Define the PII fields tuple
-PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+PII_FIELDS = ("email", "ssn", "password", "address", "phone_number")
 
 
 # 0. Regex-ing task
@@ -47,7 +47,7 @@ class RedactingFormatter(logging.Formatter):
 # Define the get_logger function
 
     def get_logger() -> logging.Logger:
-        """Returns a Logger Object."""
+        """Returns a logger object configured for user data."""
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
