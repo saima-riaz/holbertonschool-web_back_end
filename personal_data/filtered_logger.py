@@ -5,6 +5,7 @@ import re
 import logging
 from typing import List
 
+
 # Define the PII fields tuple
 PII_FIELDS = ("email", "ssn", "password", "address", "phone_number")
 
@@ -42,18 +43,16 @@ class RedactingFormatter(logging.Formatter):
         )
         return super().format(record)
 
-# 2. Create logger
-
 # Define the get_logger function
 
-    def get_logger() -> logging.Logger:
-        """Returns a logger object configured for user data."""
+def get_logger() -> logging.Logger:
+    """Returns a logger object configured for user data."""
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
     stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
+    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(stream_handler)
 
     return logger
