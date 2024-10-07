@@ -45,6 +45,7 @@ class RedactingFormatter(logging.Formatter):
 
 # Define the get_logger function
 
+
 def get_logger() -> logging.Logger:
     """Returns a logger object configured for user data."""
     logger = logging.getLogger("user_data")
