@@ -83,6 +83,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 # task 4
 
+
 def main():
     """Main function to retrieve and log user data DB securely."""
     db = get_db()
