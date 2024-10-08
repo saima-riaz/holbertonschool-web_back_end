@@ -9,8 +9,8 @@ def hash_password(password: str) -> bytes:
     # Generate a salt
     salt = bcrypt.gensalt()
     # Hash the password
-    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password
 
 # task 6 
 
