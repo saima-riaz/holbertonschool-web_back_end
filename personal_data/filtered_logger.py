@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """ Regex-ing """
 
+from typing import List
 import re
 import logging
-from typing import List
+import os
+import mysql.connector
 
 
 # Define the PII fields tuple
 PII_FIELDS = ("email", "ssn", "password", "address", "phone_number")
 
 
-# 0. Regex-ing task
+# Task 0. Regex-ing task
 
 def filter_datum(
     fields: List[str], redaction: str, message: str, separator: str
@@ -21,7 +23,7 @@ def filter_datum(
     return message
 
 
-# 1. Log formatter
+# Task 1. Log formatter
 
 
 class RedactingFormatter(logging.Formatter):
@@ -43,7 +45,7 @@ class RedactingFormatter(logging.Formatter):
         )
         return super().format(record)
 
-# Define the get_logger function
+# Task 2 Define the get_logger function
 
 
 def get_logger() -> logging.Logger:
@@ -57,3 +59,32 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+# Task 3  Connect to secure database
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """ Function that returns a connector to the database.
+    """
+    db_username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    db_password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    db_host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
+
+    connection = mysql.connector.connect(
+        user=db_username,
+        password=db_password,
+        host=db_host,
+        database=db_name
+    )
+
+    return connection
+
+
+
+
+
+
+
+
