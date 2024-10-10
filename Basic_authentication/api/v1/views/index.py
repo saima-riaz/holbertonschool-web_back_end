@@ -33,9 +33,11 @@ def unauthorized() -> str:
     abort(401)
 
 
-@app_views.route('forbbiden', methods=['GET'], strict_slashes=False)
-def forbbiden() -> str:
-    """Return:
+# New endpoint for raising 401 error forbbiden
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden() -> str:
+    """ GET /api/v1/Forbidden
+    Return:
       - raises 403 error
     """
     abort(403)

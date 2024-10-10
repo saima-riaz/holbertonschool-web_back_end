@@ -33,7 +33,6 @@ if __name__ == "__main__":
 
 
 @app.errorhandler(403)
-def forbidden(error) -> str:
-
-    """error forbidden"""
+def forbidden_error(error):
+    """ Custom handler for 403 Forbidden errors """
     return jsonify({"error": "Forbidden"}), 403
