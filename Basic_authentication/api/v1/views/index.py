@@ -31,3 +31,11 @@ def unauthorized() -> str:
     Raises:401 Unauthorized error
     """
     abort(401)
+
+
+@app_views.route('forbbiden', methods=['GET'], strict_slashes=False)
+def forbbiden() -> str:
+    """Return:
+      - raises 403 error
+    """
+    abort(403)
