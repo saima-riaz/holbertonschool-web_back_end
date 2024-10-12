@@ -6,47 +6,43 @@ from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
-from api.v1.auth.auth import Auth
-from api.v1.auth.session_auth import SessionAuth
+import os
+from api.v1.views import app_views
+
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-# Initialize the auth variable based on the AUTH_TYPE environment variable
-auth = None
 auth_type = getenv("AUTH_TYPE")
 if auth_type == "session_auth":
+    from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
 else:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
+
 @app.before_request
 def before_request_func():
-    """ Method to filter requests before routing """
+    """ Function that filter each request."""
     if auth is None:
         return
-    # Define excluded paths, including the new session login path
-    excluded_paths = [
-        '/api/v1/status/',
-        '/api/v1/unauthorized/',
-        '/api/v1/forbidden/',
-        '/api/v1/auth_session/login/'
-    ]
-    
-    # If the request path does not require authentication, continue
-    if not auth.require_auth(request.path, excluded_paths):
+
+    exempt_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
+                    '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+
+    if not auth.require_auth(request.path, exempt_paths):
         return
-    
-    # Check both the authorization header and session cookie
-    if auth.authorization_header(request) is None and auth.session_cookie(request) is None:
-        return jsonify({"error": "Unauthorized"}), 401
-    
-    # If the current user is not found, abort with 403 Forbidden
+
+    if (auth.authorization_header(request) is None and
+            auth.session_cookie(request) is None):
+        abort(401)
+
     request.current_user = auth.current_user(request)
-    if auth.current_user(request) is None:
-        return jsonify({"error": "Forbidden"}), 403
+
+    if request.current_user is None:
+        abort(403)
 
 
 @app.errorhandler(404)
@@ -57,14 +53,16 @@ def not_found(error) -> str:
 
 
 @app.errorhandler(401)
-def unauthorized_error(error):
-    """ Custom handler for 401 Unauthorized errors """
+def unauthorized(error) -> str:
+    """ Unauthorized handler
+    """
     return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
-def forbidden_error(error):
-    """ Custom handler for 403 Forbidden errors """
+def forbidden(error) -> str:
+    """ Forbidden handler
+    """
     return jsonify({"error": "Forbidden"}), 403
 
 
