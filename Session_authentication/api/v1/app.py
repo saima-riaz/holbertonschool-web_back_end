@@ -6,12 +6,8 @@ from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
-import os
-# Import the Auth class
 from api.v1.auth.auth import Auth
-from api.v1.auth.basic_auth import BasicAuth
 from api.v1.auth.session_auth import SessionAuth
-
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -26,18 +22,29 @@ else:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
-
 @app.before_request
 def before_request_func():
     """ Method to filter requests before routing """
     if auth is None:
         return
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    # Define excluded paths, including the new session login path
+    excluded_paths = [
+        '/api/v1/status/',
+        '/api/v1/unauthorized/',
+        '/api/v1/forbidden/',
+        '/api/v1/auth_session/login/'
+    ]
+    
+    # If the request path does not require authentication, continue
     if not auth.require_auth(request.path, excluded_paths):
         return
-    if auth.authorization_header(request) is None:
+    
+    # Check both the authorization header and session cookie
+    if auth.authorization_header(request) is None and auth.session_cookie(request) is None:
         return jsonify({"error": "Unauthorized"}), 401
+    
+    # If the current user is not found, abort with 403 Forbidden
+    request.current_user = auth.current_user(request)
     if auth.current_user(request) is None:
         return jsonify({"error": "Forbidden"}), 403
 
@@ -59,29 +66,6 @@ def unauthorized_error(error):
 def forbidden_error(error):
     """ Custom handler for 403 Forbidden errors """
     return jsonify({"error": "Forbidden"}), 403
-
-
-@app.before_request
-def before_request_handler():
-    """ Handler for filtering requests before they reach the view functions """
-    if auth is None:
-        return
-
-    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/']
-
-    # If the request path does not require auth, continue
-    if not auth.require_auth(request.path, excluded_paths):
-        return
-
-    # If there is no authorization header, abort with 401 Unauthorized
-    if auth.authorization_header(request) is None:
-        abort(401)
-
-    # If the current user is not found, abort with 403 Forbidden
-    request.current_user = auth.current_user(request)
-    if auth.current_user(request) is None:
-        abort(403)
 
 
 if __name__ == "__main__":
