@@ -32,7 +32,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-# task 2
+# task 1
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add and save a user to the database."""
         user = User(email=email, hashed_password=hashed_password)
@@ -40,7 +40,7 @@ class DB:
         self._session.commit()
         return user
 
-# task 3
+# task 2
 
     def find_user_by(self, **kwargs) -> User:
         """Arbitrary keyword arguments return first row of user."""
@@ -55,3 +55,22 @@ class DB:
             raise NoResultFound("No user found.")
         except InvalidRequestError:
             raise InvalidRequestError("Invalid query parameters.")
+
+# task 3 update user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Locate user by ID, update the user's
+        attributes with provided kwargs, and commit changes."""
+        try:
+            user = self.find_user_by(id=user_id)
+            for key, value in kwargs.items():
+                # Check if the attribute exists on the user model
+                if not hasattr(user, key):
+                    raise ValueError(f"User has no attribute '{key}'")
+                # Set the attribute value
+                setattr(user, key, value)
+            self.__session.commit()
+        except NoResultFound:
+            raise ValueError("No user found with the given ID")
+        except InvalidRequestError:
+            raise ValueError("Invalid query parameters")
