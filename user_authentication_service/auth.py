@@ -18,11 +18,6 @@ class Auth:
         """Hash a password using bcrypt."""
         return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    def _generate_uuid() -> str:
-        """ Generates a new UUID and returns its string representation.
-        """
-        return str(uuid.uuid4())
-
     def register_user(self, email: str, password: str) -> User:
         """Register a new user if they don't already exist."""
         try:
@@ -53,3 +48,8 @@ class Auth:
 
         except NoResultFound:
             return False
+    
+    def _generate_uuid() -> str:
+        """ Generates a new UUID and returns its string representation.
+        """
+        return str(uuid.uuid4())
