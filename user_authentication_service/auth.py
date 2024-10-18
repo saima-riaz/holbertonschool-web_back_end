@@ -8,8 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 
 class Auth:
-    """Auth class to interact with the authentication database.
-    """
+    """Auth class to interact with the authentication database."""
 
     def __init__(self):
         self._db = DB()
@@ -24,18 +23,27 @@ class Auth:
             existing_user = self._db.find_user_by(email=email)
             if existing_user:
                 raise ValueError("User {} already exists".format(email))
-
         except NoResultFound:
             hashed_password = self._hash_password(password)
             new_user = self._db.add_user(email, hashed_password)
             return new_user
 
     def valid_login(self, email: str, password: str) -> bool:
-        """ Validates if a given email and password correspond to a valid user.
-        """
+        """Validates if a given email and
+        password correspond to a valid user."""
         try:
             user = self._db.find_user_by(email=email)
-            return bcrypt.checkpw(password.encode(), user.hashed_password)
+
+            # Ensure user exists and hashed_password is available
+            if user and hasattr(user, 'hashed_password'):
+                # Compare the provided password with the stored hashed password
+                if bcrypt.checkpw(
+                    password.encode('utf-8'),
+                    user.hashed_password
+                ):
+                    return True
+
+            return False
 
         except NoResultFound:
             return False
