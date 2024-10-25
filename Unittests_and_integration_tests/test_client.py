@@ -11,16 +11,16 @@ class TestGithubOrgClient(unittest.TestCase):
     """ Test that json can be got """
 
     @parameterized.expand([
-        ("google", {"login": "google"}),
-        ("abc", {"login": "abc"}),
+        ("google", {"google": True}),
+        ("abc", {"abc": True})
     ])
-    @patch('client.get_json', return_value={"login": "test_org"})
-    def test_org(self, org_name, expected, mock_get_json):
-        client = GithubOrgClient(org_name)
-        self.assertEqual(client.org, expected)
-        mock_get_json.assert_called_once_with(
-            f"https://api.github.com/orgs/{org_name}"
-        )
+    @patch('client.get_json')
+    def test_org(self, org, expected, get_patch):
+        """ Test the org of the client """
+        get_patch.return_value = expected
+        x = GithubOrgClient(org)
+        self.assertEqual(x.org, expected)
+        get_patch.assert_called_once_with("https://api.github.com/orgs/"+org)
 
 
 if __name__ == "__main__":
