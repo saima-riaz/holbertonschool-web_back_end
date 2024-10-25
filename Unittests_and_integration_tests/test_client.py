@@ -8,6 +8,7 @@ from client import GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
+    """ Test that json can be got """
 
     @parameterized.expand([
         ("google", {"login": "google"}),
