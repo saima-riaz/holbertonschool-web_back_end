@@ -29,12 +29,13 @@ class TestAccessNestedMap(unittest.TestCase):
         # Verifying the exception message
         self.assertEqual(str(context.exception), f"'{path[-1]}'")
 
+
 class TestGetJson(unittest.TestCase):
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False}),
     ])
-    @patch('utils.requests.get')  # Patching 'requests.get' in the 'utils' module
+    @patch('utils.requests.get')
     def test_get_json(self, test_url, test_payload, mock_get):
         # Mock the response's .json method to return test_payload
         mock_response = Mock()
@@ -50,6 +51,7 @@ class TestGetJson(unittest.TestCase):
         # Assert the output from get_json is equal to test_payload
         self.assertEqual(result, test_payload)
 
+
 class TestMemoize(unittest.TestCase):
 
     def test_memoize(self):
@@ -63,7 +65,9 @@ class TestMemoize(unittest.TestCase):
             def a_property(self):
                 return self.a_method()
 
-        with patch.object(TestClass, 'a_method', return_value=42) as mock_method:
+        with patch.object(
+            TestClass, 'a_method', return_value=42
+        ) as mock_method:
             test_instance = TestClass()
 
             # Access a_property twice
