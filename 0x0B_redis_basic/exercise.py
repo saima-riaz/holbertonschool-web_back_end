@@ -1,5 +1,3 @@
-# exercise.py
-
 import redis
 import uuid
 from typing import Union, Callable, Optional
@@ -16,6 +14,25 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    """Decorator that stores the history of inputs and outputs of a method."""
+    @wraps(method)
+    def wrapper(self, *args):
+        # Generate Redis keys for inputs and outputs
+        input_key = f"{method.__qualname__}:inputs"
+        output_key = f"{method.__qualname__}:outputs"
+        
+        # Store the input arguments as a string in Redis
+        self._redis.rpush(input_key, str(args))
+        
+        # Execute the method and store the output
+        result = method(self, *args)
+        self._redis.rpush(output_key, str(result))
+        
+        return result
+    return wrapper
+
+
 class Cache:
     def __init__(self):
         """Initialize Redis client and flush database."""
@@ -23,17 +40,16 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """Generate a random key,
-        store the data in Redis using the key, and return the key."""
+        """Generate a random key, store the data in Redis using the key, and return the key."""
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
 
     def get(self, key: str, fn: Optional[Callable] = None
             ) -> Union[str, bytes, int, float, None]:
-        """Retrieve data from Redis by key
-        and optionally apply a conversion function `fn`."""
+        """Retrieve data from Redis by key and optionally apply a conversion function `fn`."""
         data = self._redis.get(key)
         if data is None:
             return None
@@ -44,6 +60,5 @@ class Cache:
         return self.get(key, fn=lambda d: d.decode("utf-8"))
 
     def get_int(self, key: str) -> Optional[int]:
-        """Retrieve an integer from Redis by key,
-        converting from bytes to int."""
+        """Retrieve an integer from Redis by key, converting from bytes to int."""
         return self.get(key, fn=int)
