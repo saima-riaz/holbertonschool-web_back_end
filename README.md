@@ -1,6 +1,6 @@
 # 🌐 Project Name: Holberton School Web Backend 🌐
 
-
+![image](https://github.com/user-attachments/assets/35e378c8-dfb7-4592-8e73-127d7217bc6d)
 
 Welcome to the Holberton School Web Backend repository! This project dives into essential backend concepts, covering everything from authentication and data management to asynchronous programming and caching. Backend development is the backbone of web applications, managing data, business logic, and server communication for a smooth user experience.
 
@@ -44,6 +44,11 @@ The project is organized into the following directories:
 - [user_authentication_service](https://github.com/saima-riaz/holbertonschool-web_back_end/tree/main/user_authentication_service)
 
 Each directory covers a distinct area, helping you build secure, scalable, and optimized applications with core backend principles.
+
+---
+### 📄 License
+
+This project is licensed under the MIT License. 
 
 ---
 ### 👤 Developer: Saima RIAZ
