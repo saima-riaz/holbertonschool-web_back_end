@@ -1,4 +1,4 @@
-function calculateNumber(type, a, b) {
+export function calculateNumber(type, a, b) {
     const roundedA = Math.round(a);
     const roundedB = Math.round(b);
   
@@ -13,6 +13,4 @@ function calculateNumber(type, a, b) {
       throw new Error('Invalid operation type');
     }
   }
-  
-  export default calculateNumber;
   

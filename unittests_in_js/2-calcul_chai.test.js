@@ -1,24 +1,26 @@
-const { expect } = require('chai');
-const calculateNumber = require('./0-calcul.js');
+import { expect } from 'chai';
+import { calculateNumber } from './2-calcul_chai.js'; // Use named import
 
 describe('calculateNumber', function () {
-  it('should return 4 when inputs are (1, 3)', function () {
-    expect(calculateNumber(1, 3)).to.equal(4);
+  describe('SUM', function () {
+    it('should return 6 when inputs are (SUM, 1.4, 4.5)', function () {
+      expect(calculateNumber('SUM', 1.4, 4.5)).to.equal(6);
+    });
   });
 
-  it('should return 5 when inputs are (1, 3.7)', function () {
-    expect(calculateNumber(1, 3.7)).to.equal(5);
+  describe('SUBTRACT', function () {
+    it('should return -4 when inputs are (SUBTRACT, 1.4, 4.5)', function () {
+      expect(calculateNumber('SUBTRACT', 1.4, 4.5)).to.equal(-4);
+    });
   });
 
-  it('should return 5 when inputs are (1.2, 3.7)', function () {
-    expect(calculateNumber(1.2, 3.7)).to.equal(5);
-  });
+  describe('DIVIDE', function () {
+    it('should return 0.2 when inputs are (DIVIDE, 1.4, 4.5)', function () {
+      expect(calculateNumber('DIVIDE', 1.4, 4.5)).to.equal(0.2);
+    });
 
-  it('should return 6 when inputs are (1.5, 3.7)', function () {
-    expect(calculateNumber(1.5, 3.7)).to.equal(6);
-  });
-
-  it('should handle edge cases with negative numbers', function () {
-    expect(calculateNumber(-1.4, -3.6)).to.equal(-5);
+    it('should return "Error" when inputs are (DIVIDE, 1.4, 0)', function () {
+      expect(calculateNumber('DIVIDE', 1.4, 0)).to.equal('Error');
+    });
   });
 });

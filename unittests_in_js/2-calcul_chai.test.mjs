@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import calculateNumber from './2-calcul_chai.js'; // Importing the function to be tested
+import { calculateNumber } from './2-calcul_chai.js'; // Use named import, not default
+
 
 describe('calculateNumber', function () {
   describe('SUM', function () {
