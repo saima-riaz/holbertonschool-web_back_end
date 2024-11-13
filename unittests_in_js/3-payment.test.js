@@ -1,19 +1,12 @@
-import { expect } from 'chai';
-import sinon from 'sinon';
-import { Utils } from './utils.js';  // Named import
-import { sendPaymentRequestToApi } from './3-payment.js';
+const sinon = require('sinon');
+const Utils = require('./utils');
+const sendPaymentRequestToApi = require('./3-payment');
 
-describe('sendPaymentRequestToApi', function () {
-  it('should call Utils.calculateNumber with the correct arguments', function () {
-    const spy = sinon.spy(Utils, 'calculateNumber');
-    
-    // Call the function to test
-    sendPaymentRequestToApi(100, 20);
-    
-    // Validate the spy was called correctly
-    expect(spy.calledOnceWithExactly('SUM', 100, 20)).to.be.true;
-    
-    // Restore the spy after the test
-    spy.restore();
-  });
+describe('sendPaymentRequestToApi', () => {
+	it('validates the usage of Utils.calculateNumber', () => {
+		const spy = sinon.spy(Utils, 'calculateNumber');
+		sendPaymentRequestToApi(100, 20);
+		sinon.assert.calledOnceWithExactly(spy, 'SUM', 100, 20);
+		spy.restore();
+	});
 });
