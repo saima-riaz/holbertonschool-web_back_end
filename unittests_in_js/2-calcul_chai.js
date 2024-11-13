@@ -1,18 +1,16 @@
 function calculateNumber(type, a, b) {
-    a = Math.round(a);
-    b = Math.round(b);
+    const roundedA = Math.round(a);
+    const roundedB = Math.round(b);
   
     if (type === 'SUM') {
-      return a + b;
-    }
-    if (type === 'SUBTRACT') {
-      return a - b;
-    }
-    if (type === 'DIVIDE') {
-      if (b === 0) {
-        return 'Error';
-      }
-      return a / b;
+      return roundedA + roundedB;
+    } else if (type === 'SUBTRACT') {
+      return roundedA - roundedB;
+    } else if (type === 'DIVIDE') {
+      if (roundedB === 0) return 'Error';
+      return roundedA / roundedB;
+    } else {
+      throw new Error('Invalid operation type');
     }
   }
   
