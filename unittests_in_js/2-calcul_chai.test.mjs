@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import calculateNumber from './2-calcul_chai.js';
+import calculateNumber from './2-calcul_chai.js'; // Importing the function to be tested
 
 describe('calculateNumber', function () {
   describe('SUM', function () {
