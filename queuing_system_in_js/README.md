@@ -1,1 +1,1 @@
-queuing_system_in_js
+Queuing System in JS
