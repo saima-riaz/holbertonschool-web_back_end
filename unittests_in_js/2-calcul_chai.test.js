@@ -1,21 +1,17 @@
-const expect = require('chai').expect;
-const calculateNumber = require('./2-calcul_chai');
+const { expect } = require('chai');
+const calculateNumber = require('./2-calcul_chai.js');
 
-    describe('Test the calculateNumber sum, subtract and divide', function() {
-
-        it('should returnthe SUM OF ROUNDED NUMBER', function() {
-            expect(calculateNumber('sum', 1.4, 4.5)).to.equal(6);
-        });
-    
-        it('should return the Difference between a & b', function() {
-            expect(calculateNumber('sub', 1.4, 4.5)).to.equal(-4);
-        });
-    
-        it('should return the Division of a & b', function() {
-            expect(calculateNumber('division', 1.4, 4.5)).to.equal(0.2);
-        });
-    
-        it('should return the Division by 0 shld throw error', function() {
-            expect(calculateNumber('division', 1.4, 0)).to.equal('Error');
-        });
+describe('calculateNumber', () => {
+	it('should return 6 for SUM of 1.4 and 4.5', () => {
+		expect(calculateNumber('SUM', 1.4, 4.5)).to.equal(6);
+	});
+	it('should return -4 for SUBTRACT of 1.4 and 4.5', () => {
+		expect(calculateNumber('SUBTRACT', 1.4, 4.5)).to.equal(-4);
+	});
+	it('should return 0.2 for DIVIDE of 1.4 and 4.5', () => {
+		expect(calculateNumber('DIVIDE', 1.4, 4.5)).to.equal(0.2);
+	});
+	it('should return "Error" for DIVIDE by zero', () => {
+		expect(calculateNumber('DIVIDE', 1.4, 0)).to.equal('Error');
+	});
 });
